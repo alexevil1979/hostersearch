@@ -80,7 +80,7 @@ See [`apache-vhost.conf.example`](apache-vhost.conf.example).
 1. Enable `mod_rewrite` and vhosts in Apache.
 2. Point `DocumentRoot` to `/public`.
 3. Add `127.0.0.1 hostersearch.test` to your hosts file.
-4. Set `APP_URL=http://hostersearch.test` in `.env`.
+4. Set `APP_URL=https://hostsearch.1tlt.ru` in `.env`.
 
 Laravel already ships `public/.htaccess` for front-controller routing.
 
