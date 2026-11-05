@@ -11,6 +11,8 @@ use App\Models\CompanyType;
 use App\Models\Feature;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -133,7 +135,15 @@ class CompanyController extends Controller
             'features' => ['nullable', 'array'],
             'pros' => ['nullable', 'string'],
             'cons' => ['nullable', 'string'],
+            'logo' => ['nullable', 'image', 'max:2048'],
         ]);
+
+        if ($request->hasFile('logo')) {
+            if ($company->logo) {
+                Storage::disk('public')->delete($company->logo);
+            }
+            $company->logo = $request->file('logo')->store('logos', 'public');
+        }
 
         $company->fill([
             'name' => $data['name'],
@@ -164,6 +174,9 @@ class CompanyController extends Controller
         $company->types()->sync($request->input('types', []));
         $featureSync = collect($request->input('features', []))->mapWithKeys(fn ($id) => [$id => ['value' => '1']])->all();
         $company->features()->sync($featureSync);
+
+        Cache::forget('home.payload.en');
+        Cache::forget('home.payload.ru');
 
         return $company;
     }

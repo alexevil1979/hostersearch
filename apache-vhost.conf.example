@@ -1,32 +1,31 @@
-# Apache VirtualHost example for HosterSearch (Laravel)
-# Copy into your Apache conf (e.g. C:\xampp\apache\conf\extra\httpd-vhosts.conf)
-# and enable: LoadModule rewrite_module, Include conf/extra/httpd-vhosts.conf
-# Then add to hosts file: 127.0.0.1 hostersearch.test
+# Production example (Ubuntu/Apache + PHP-FPM 8.2)
+# Domain: hostsearch.1tlt.ru
+# DocumentRoot must point to /public
 
 <VirtualHost *:80>
-    ServerName hostersearch.test
-    ServerAlias www.hostersearch.test
-    DocumentRoot "C:/Users/1/Documents/hostersearch/public"
+    ServerName hostsearch.1tlt.ru
+    DocumentRoot /ssd/www/hostersearch/public
 
-    <Directory "C:/Users/1/Documents/hostersearch/public">
+    <Directory /ssd/www/hostersearch>
+        Require all denied
+    </Directory>
+    <Directory /ssd/www/hostersearch/public>
+        Options -Indexes +FollowSymLinks
         AllowOverride All
         Require all granted
-        Options -Indexes +FollowSymLinks
     </Directory>
 
-    ErrorLog "logs/hostersearch-error.log"
-    CustomLog "logs/hostersearch-access.log" common
+    <FilesMatch \.php$>
+        SetHandler "proxy:unix:/run/php/php8.2-fpm.sock|fcgi://localhost"
+    </FilesMatch>
+
+    ErrorLog ${APACHE_LOG_DIR}/hostsearch_error.log
+    CustomLog ${APACHE_LOG_DIR}/hostsearch_access.log combined
 </VirtualHost>
 
-# Optional HTTPS (requires a local cert, e.g. mkcert)
-# <VirtualHost *:443>
-#     ServerName hostersearch.test
-#     DocumentRoot "C:/Users/1/Documents/hostersearch/public"
-#     SSLEngine on
-#     SSLCertificateFile "path/to/hostersearch.test.pem"
-#     SSLCertificateKeyFile "path/to/hostersearch.test-key.pem"
-#     <Directory "C:/Users/1/Documents/hostersearch/public">
-#         AllowOverride All
-#         Require all granted
-#     </Directory>
-# </VirtualHost>
+# SSL is issued on the VPS with certbot (not Cloudflare proxy):
+# certbot --apache -d hostsearch.1tlt.ru
+
+# Local XAMPP example:
+# ServerName hostsearch.test
+# DocumentRoot "C:/Users/1/Documents/hostersearch/public"

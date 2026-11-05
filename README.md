@@ -60,6 +60,9 @@ npm run build
 # 8) Run
 php artisan serve
 # → http://127.0.0.1:8000
+
+# Production: https://hostsearch.1tlt.ru
+# SSL is terminated on the VPS (Let's Encrypt / Apache), Cloudflare DNS-only.
 ```
 
 ### Demo accounts (after seed)

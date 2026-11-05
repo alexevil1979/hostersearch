@@ -24,7 +24,15 @@
 @section('content')
 <div class="border-b border-slate-200 bg-white/70">
     <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-        <div>
+        <div class="flex items-start gap-4">
+            <div class="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-soft">
+                @if ($company->logo)
+                    <img src="{{ asset('storage/'.$company->logo) }}" alt="{{ $company->name }}" class="h-full w-full object-contain" loading="lazy">
+                @else
+                    <span class="text-lg font-bold text-brand-800">{{ strtoupper(substr($company->name, 0, 2)) }}</span>
+                @endif
+            </div>
+            <div>
             <h1 class="font-display text-4xl font-semibold text-brand-950">{{ t_field($company, 'name') }}</h1>
             <div class="mt-3 flex flex-wrap items-center gap-3">
                 <x-stars :score="$company->overall_score" size="lg" />
@@ -35,6 +43,7 @@
                 @endif
             </div>
             <p class="mt-4 max-w-2xl text-slate-600">{{ t_field($company, 'short_description') }}</p>
+            </div>
         </div>
         <div class="flex flex-wrap gap-3">
             <a href="{{ route('go', $company) }}" rel="nofollow sponsored" class="btn-accent">{{ __('Visit Site') }}</a>

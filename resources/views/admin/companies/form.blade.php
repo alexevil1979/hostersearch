@@ -3,11 +3,20 @@
 @section('heading', $company->exists ? 'Edit: '.$company->name : 'New company')
 
 @section('content')
-<form method="post" action="{{ $company->exists ? route('admin.companies.update', $company) : route('admin.companies.store') }}" class="space-y-6">
+<form method="post" action="{{ $company->exists ? route('admin.companies.update', $company) : route('admin.companies.store') }}" enctype="multipart/form-data" class="space-y-6">
     @csrf
     @if ($company->exists) @method('PUT') @endif
 
     <div class="grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 lg:grid-cols-2">
+        <div class="lg:col-span-2 flex items-center gap-4">
+            @if ($company->logo)
+                <img src="{{ asset('storage/'.$company->logo) }}" alt="" class="h-14 w-14 rounded-xl object-contain bg-slate-50">
+            @endif
+            <div class="flex-1">
+                <label class="mb-1 block text-sm font-medium">Logo</label>
+                <input type="file" name="logo" accept="image/*" class="w-full rounded-xl border-slate-200 text-sm">
+            </div>
+        </div>
         <div>
             <label class="mb-1 block text-sm font-medium">Name</label>
             <input name="name" value="{{ old('name', $company->name) }}" required class="w-full rounded-xl border-slate-200">

@@ -1,0 +1,40 @@
+# Dependencies / build
+node_modules/
+vendor/
+public/build/
+public/hot/
+public/storage/
+bootstrap/cache/
+.phpunit.cache/
+.phpunit.result.cache
+
+# Runtime / logs
+storage/logs/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+storage/pail/
+*.log
+
+# Secrets / dumps
+.env
+.env.*
+!.env.example
+*.sql
+auth.json
+
+# Replica / screenshots noise
+replica/screens/
+
+# IDE / OS
+.idea/
+.vscode/
+.fleet/
+.nova/
+.zed/
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+*.tar.gz

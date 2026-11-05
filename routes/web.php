@@ -13,6 +13,8 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SitemapController;
+use App\Http\Controllers\WhoIsHostingController;
+use App\Http\Controllers\Admin\ExportController as AdminExportController;
 use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ClaimController as AdminClaimController;
@@ -34,7 +36,7 @@ Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/locale/{locale}', [LocaleController::class, 'locale'])->name('locale.switch');
 Route::get('/currency/{currency}', [LocaleController::class, 'currency'])->name('currency.switch');
 
-Route::get('/go/{company:slug}', GoController::class)->name('go');
+Route::get('/go/{company:slug}', GoController::class)->middleware('throttle:60,1')->name('go');
 
 Route::get('/coupons', [CouponController::class, 'index'])->name('coupons.index');
 
@@ -60,7 +62,8 @@ Route::get('/pages/{slug}', [PageController::class, 'show'])->name('pages.show')
 Route::get('/about', fn () => redirect()->route('pages.show', 'about'))->name('about');
 Route::get('/methodology', fn () => redirect()->route('pages.show', 'methodology'))->name('methodology');
 Route::get('/faq', fn () => redirect()->route('pages.show', 'faq'))->name('faq');
-Route::get('/who-is-hosting', fn () => redirect()->route('pages.show', 'who-is-hosting'))->name('who-is-hosting');
+Route::get('/who-is-hosting', [WhoIsHostingController::class, 'index'])->name('who-is-hosting');
+Route::post('/who-is-hosting', [WhoIsHostingController::class, 'lookup'])->middleware('throttle:20,1')->name('who-is-hosting.lookup');
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -121,6 +124,10 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->name('ad
     Route::put('settings', [AdminSettingController::class, 'update'])->name('settings.update');
 
     Route::get('activity', [AdminActivityLogController::class, 'index'])->name('activity.index');
+
+    Route::get('export/companies', [AdminExportController::class, 'companies'])->name('export.companies');
+    Route::get('export/reviews', [AdminExportController::class, 'reviews'])->name('export.reviews');
+    Route::get('export/clicks', [AdminExportController::class, 'clicks'])->name('export.clicks');
 });
 
 Route::middleware(['auth', 'role:partner,admin,super_admin'])->prefix('partner')->name('partner.')->group(function () {
@@ -135,5 +142,5 @@ require __DIR__.'/auth.php';
 
 // Category catch-all after named app routes
 Route::get('/{category:slug}', [CategoryController::class, 'show'])
-    ->where('category', '^(?!login|register|dashboard|admin|partner|profile|password|forgot-password|reset-password|verify-email|confirm-password|search|coupons|claim|about|methodology|faq|pages|go|locale|currency|tools|web-hosting-advisor|hosting-company|sitemap\\.xml|up).+')
+    ->where('category', '^(?!login|register|dashboard|admin|partner|profile|password|forgot-password|reset-password|verify-email|confirm-password|search|coupons|claim|about|methodology|faq|pages|go|locale|currency|tools|web-hosting-advisor|hosting-company|who-is-hosting|sitemap\\.xml|up).+')
     ->name('categories.show');

@@ -22,6 +22,7 @@
                 <li><a class="hover:text-white" href="{{ route('methodology') }}">{{ __('Methodology') }}</a></li>
                 <li><a class="hover:text-white" href="{{ route('faq') }}">{{ __('FAQ') }}</a></li>
                 <li><a class="hover:text-white" href="{{ route('claim.create') }}">{{ __('Claim listing') }}</a></li>
+                <li><a class="hover:text-white" href="{{ route('who-is-hosting') }}">Who is hosting</a></li>
             </ul>
         </div>
         <div>
