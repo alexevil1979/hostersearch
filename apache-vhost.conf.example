@@ -1,0 +1,32 @@
+# Apache VirtualHost example for HosterSearch (Laravel)
+# Copy into your Apache conf (e.g. C:\xampp\apache\conf\extra\httpd-vhosts.conf)
+# and enable: LoadModule rewrite_module, Include conf/extra/httpd-vhosts.conf
+# Then add to hosts file: 127.0.0.1 hostersearch.test
+
+<VirtualHost *:80>
+    ServerName hostersearch.test
+    ServerAlias www.hostersearch.test
+    DocumentRoot "C:/Users/1/Documents/hostersearch/public"
+
+    <Directory "C:/Users/1/Documents/hostersearch/public">
+        AllowOverride All
+        Require all granted
+        Options -Indexes +FollowSymLinks
+    </Directory>
+
+    ErrorLog "logs/hostersearch-error.log"
+    CustomLog "logs/hostersearch-access.log" common
+</VirtualHost>
+
+# Optional HTTPS (requires a local cert, e.g. mkcert)
+# <VirtualHost *:443>
+#     ServerName hostersearch.test
+#     DocumentRoot "C:/Users/1/Documents/hostersearch/public"
+#     SSLEngine on
+#     SSLCertificateFile "path/to/hostersearch.test.pem"
+#     SSLCertificateKeyFile "path/to/hostersearch.test-key.pem"
+#     <Directory "C:/Users/1/Documents/hostersearch/public">
+#         AllowOverride All
+#         Require all granted
+#     </Directory>
+# </VirtualHost>
