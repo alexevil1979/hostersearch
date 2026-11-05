@@ -1,2 +1,4 @@
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://hosersearch.1tlt.ru/sitemap.xml
